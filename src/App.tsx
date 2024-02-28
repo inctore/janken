@@ -3,7 +3,15 @@ import "./App.css";
 
 type Hand = "g" | "c" | "p";
 type Result = "win" | "lose" | "draw";
-type HandPair = [Hand, Hand];
+type HandPair =
+  | {
+      ai: Hand;
+      player: Hand;
+    }
+  | {
+      ai: undefined;
+      player: undefined;
+    };
 
 const handMap = {
   g: "✊",
@@ -20,8 +28,12 @@ function chooseHand(): Hand {
   return hands[Math.floor(Math.random() * 3)];
 }
 
-function PlayCell(hand: Hand): JSX.Element {
-  return <span style={{ fontSize: "6em" }}>{handMap[hand]}</span>;
+function PlayCell(hand?: Hand): JSX.Element {
+  return (
+    <span style={{ fontSize: "6em", margin: "0.5em" }}>
+      {hand ? handMap[hand] : "-"}
+    </span>
+  );
 }
 
 function judge(myHand: Hand, enemyHand: Hand): Result {
@@ -37,7 +49,10 @@ function judge(myHand: Hand, enemyHand: Hand): Result {
 
 function App() {
   const [handHistory, setHandHistory] = useState<Hand[]>([]);
-  const [hands, setHands] = useState<HandPair | null>(null);
+  const [hands, setHands] = useState<HandPair>({
+    ai: undefined,
+    player: undefined,
+  });
   const [numMatches, setNumMatches] = useState(0);
   const [numWins, setNumWins] = useState(0);
 
@@ -47,19 +62,29 @@ function App() {
     const result = judge(myHand, hand);
     setNumMatches((prev) => prev + 1);
     if (result === "win") setNumWins((prev) => prev + 1);
-    setHands([myHand, hand]);
+    setHands({ ai: myHand, player: hand });
     setHandHistory((prev) => [...prev, hand]);
+  };
+
+  const reload = () => {
+    setHandHistory([]);
+    setHands({ ai: undefined, player: undefined });
+    setNumMatches(0);
+    setNumWins(0);
   };
 
   return (
     <>
       <div>
-        <button>reload</button>
+        <button onClick={reload}>reload</button>
       </div>
       <div>
         {numWins} / {numMatches}
       </div>
-      <div>{hands ? hands.map(PlayCell) : null}</div>
+      <div>
+        {PlayCell(hands.ai)}
+        {PlayCell(hands.player)}
+      </div>
       <div>
         <button onClick={onSelect("g")}>✊</button>
         <button onClick={onSelect("c")}>✌️</button>
