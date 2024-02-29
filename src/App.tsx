@@ -75,11 +75,15 @@ function App() {
 
   return (
     <>
-      <div>
-        <button onClick={reload}>reload</button>
-      </div>
-      <div>
-        {numWins} / {numMatches}
+      <div className="header">
+        <div className="header-content">
+          <div>
+            <button onClick={reload}>reload</button>
+          </div>
+          <div>
+            {numWins} / {numMatches}
+          </div>
+        </div>
       </div>
       <div>
         {PlayCell(hands.ai)}

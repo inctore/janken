@@ -7,4 +7,13 @@
 .header {
   /* 高さは画面の1/3 */
   height: 33vh;
+  position: relative;
+}
+
+.header-content {
+  /* 親要素の一番下の真ん中に配置 */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
 }
