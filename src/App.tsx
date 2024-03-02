@@ -1,35 +1,55 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./App.css";
+
+type Hand = "g" | "c" | "p";
+type Result = "win" | "lose" | "draw";
+
+const handMap = {
+  g: "✊",
+  c: "✌️",
+  p: "✋",
+};
+
+function HistoryCell(hand: Hand): JSX.Element {
+  return <span>{handMap[hand]}</span>;
+}
+
+function chooseHand(): Hand {
+  const hands: Hand[] = ["g", "c", "p"];
+  return hands[Math.floor(Math.random() * 3)];
+}
+
+function judge(myHand: Hand, enemyHand: Hand): Result {
+  if (myHand === enemyHand) return "draw";
+  if (
+    (myHand === "g" && enemyHand === "c") ||
+    (myHand === "c" && enemyHand === "p") ||
+    (myHand === "p" && enemyHand === "g")
+  )
+    return "win";
+  return "lose";
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [handHistory, setHandHistory] = useState<Hand[]>([]);
+
+  const onSelect = (hand: Hand) => (e: any) => {
+    e.preventDefault();
+    const myHand = chooseHand();
+    const result = judge(myHand, hand);
+    setHandHistory((prev) => [...prev, hand]);
+  };
 
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <button onClick={onSelect("g")}>✊</button>
+        <button onClick={onSelect("c")}>✌️</button>
+        <button onClick={onSelect("p")}>✋</button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div>{handHistory.map(HistoryCell)}</div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
