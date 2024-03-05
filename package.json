@@ -8,7 +8,9 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "mocha"
+    "test": "mocha",
+    "deploy": "gh-pages -d dist",
+    "pre-deploy": "npm run build"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -26,6 +28,7 @@
     "eslint": "^8.56.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "gh-pages": "^6.1.1",
     "mocha": "^10.3.0",
     "prettier": "^3.2.5",
     "ts-node": "^10.9.2",
