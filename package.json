@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "mocha",
     "deploy": "gh-pages -d dist",
-    "pre-deploy": "npm run build"
+    "predeploy": "npm run build"
   },
   "homepage": "https://www.inctore.com/janken",
   "dependencies": {
