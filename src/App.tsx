@@ -3,9 +3,6 @@ import "./App.css";
 import { Hand, Result, ResultCount } from "./types";
 import Predictor from "./Predictor";
 
-// note: global variable !!
-const predictor = new Predictor(5);
-
 type HandPair =
   | {
       ai: Hand;
@@ -45,10 +42,6 @@ function SelectHandButton(props: {
   );
 }
 
-function chooseHand(): Hand {
-  return predictor.predict();
-}
-
 function PlayCell(hand?: Hand): JSX.Element {
   return (
     <span style={{ fontSize: "3em", margin: "0.5em" }}>
@@ -71,6 +64,7 @@ function judge(myHand: Hand, enemyHand: Hand): Result {
 const timeLimit = 20;
 
 function App() {
+  const [predictor, _] = useState(new Predictor(3));
   const [handHistory, setHandHistory] = useState<Hand[]>([]);
   const [hands, setHands] = useState<HandPair>({
     ai: undefined,
@@ -86,6 +80,10 @@ function App() {
   const [status, setStatus] = useState<"playing" | "finished" | "before">(
     "before"
   );
+
+  const chooseHand = () => {
+    return predictor.predict();
+  };
 
   const startCountdown = () => {
     setStatus("playing");
