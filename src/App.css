@@ -6,7 +6,7 @@
 
 .header {
   /* 高さは画面の1/3 */
-  height: 33vh;
+  height: 25vh;
   position: relative;
 }
 
@@ -16,4 +16,9 @@
   left: 0;
   right: 0;
   position: absolute;
+}
+
+button.select-hand {
+  margin: 2px;
+  min-width: 7rem;
 }
