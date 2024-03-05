@@ -12,6 +12,7 @@
     "deploy": "gh-pages -d dist",
     "pre-deploy": "npm run build"
   },
+  "homepage": "https://www.inctore.com/janke",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
