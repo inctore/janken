@@ -64,7 +64,7 @@ function judge(myHand: Hand, enemyHand: Hand): Result {
 const timeLimit = 20;
 
 function App() {
-  const [predictor, _] = useState(new Predictor(3));
+  const [predictor, _] = useState(new Predictor(5));
   const [handHistory, setHandHistory] = useState<Hand[]>([]);
   const [hands, setHands] = useState<HandPair>({
     ai: undefined,

@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import Predictor, { Node } from "../src/Predictor";
+import Predictor, { Node, followers, probability } from "../src/Predictor";
 import { Hand } from "../src/types";
 
 describe("Predictor", () => {
@@ -37,6 +37,61 @@ describe("Predictor", () => {
       predictor.receive(randomHand());
       const hand = predictor.doPredict(3);
       assert.include(["g", "c", "p"], hand);
+    }
+  });
+
+  it("should return valid count", () => {
+    const predictor = new Predictor(3);
+    assert.equal(0, followers(predictor.root, []).length);
+
+    predictor.receive("g");
+    assert.equal(1, followers(predictor.root, []).length);
+    assert.equal(0, followers(predictor.root, ["g"]).length);
+
+    predictor.receive("c");
+    assert.equal(2, followers(predictor.root, []).length);
+    assert.equal(1, followers(predictor.root, ["g"]).length);
+    assert.equal(0, followers(predictor.root, ["c"]).length);
+
+    predictor.receive("p");
+    assert.equal(3, followers(predictor.root, []).length);
+    assert.equal(1, followers(predictor.root, ["g"]).length);
+    assert.equal(1, followers(predictor.root, ["c"]).length);
+    assert.equal(0, followers(predictor.root, ["p"]).length);
+    assert.equal(1, followers(predictor.root, ["g", "c"]).length);
+  });
+
+  it("should return valid probability", () => {
+    const predictor = new Predictor(3);
+    const p1 = probability(predictor.root, []);
+    for (let v of ["g", "c", "p"]) {
+      assert.equal(1 / 3, p1[v as Hand]);
+    }
+    predictor.receive("g");
+    const p2 = probability(predictor.root, ["g"]);
+    for (let v of ["g", "c", "p"]) {
+      assert.equal(1 / 3, p2[v as Hand]);
+    }
+
+    predictor.receive("g");
+    const p3 = probability(predictor.root, ["g"]);
+    for (let v of ["g", "c", "p"]) {
+      assert.equal(1 / 3, p3[v as Hand]);
+    }
+
+    predictor.receive("g");
+    const p4 = probability(predictor.root, ["g"]);
+    for (let v of ["g", "c", "p"]) {
+      if (v === "g") {
+        assert.equal(2 / 4, p4[v as Hand]);
+      } else {
+        assert.equal(1 / 4, p4[v as Hand]);
+      }
+    }
+
+    const p5 = probability(predictor.root, ["g", "g"]);
+    for (let v of ["g", "c", "p"]) {
+      assert.equal(1 / 3, p5[v as Hand]);
     }
   });
 });

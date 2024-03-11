@@ -5,3 +5,4 @@ export type ResultCount = {
   lose: number;
   draw: number;
 };
+export const HANDS: Hand[] = ["g", "c", "p"];
